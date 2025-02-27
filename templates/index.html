@@ -1,0 +1,192 @@
+<!DOCTYPE HTML>
+<!--
+	Photon by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>FB Page Scraper</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="/static/assets/css/main.css" />
+		<link rel="stylesheet" href="/static/assets/css/loading-bar.min.css"/>
+		<noscript><link rel="stylesheet" href="/static/assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Header -->
+			<section id="header">
+				<div class="inner"><span class="icon solid brands fa-facebook-f"><span class="icon solid major fa-search-plus"></span>
+					<h1>Extract latest posts, including videos <br/> and reels, from a Facebook page.</h1>
+					<p><strong>FB Page Scraper</strong> can extract posts, videos, and reels from a Facebook page <br>without getting banned or blocked. This demo will show you how a <br>single Facebook session can cater to all users of the app without getting banned. <br>Simply enter the Facebook page URL, and let the app do the work for you.</p>
+					<ul class="actions special">
+						<li><a href="#one" class="button scrolly">Try it</a></li>
+					</ul>
+				</div>
+			</section>
+
+		<!-- One -->
+			<section id="one" class="main style1">
+				<div class="container">
+					<div class="row gtr-150">
+						<div class="col-6 col-12-medium">
+							<header class="major">
+								<h2>Enter the Facebook Page URL you want to scrape.</h2>
+							</header>
+							<div class="flex flex-col gap-4">
+								<input id="fb_url" value="" name="fb_url" type="text" placeholder="https://www.facebook.com/..." class="!text-[#000] !bg-[#fff]">
+								<!-- From Uiverse.io by adamgiebl --> 
+								<button id="scrape" class="cssbuttons-io-button">
+									Start Scraping
+									<div class="icon">
+									<svg
+										height="24"
+										width="24"
+										viewBox="0 0 24 24"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<path d="M0 0h24v24H0z" fill="none"></path>
+										<path
+										d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+										fill="currentColor"
+										></path>
+									</svg>
+									</div>
+								</button>
+								
+							</div>
+						</div>
+						<div class="col-6 col-12-medium imp-medium flex flex-col justify-center items-center gap-2">
+							<div
+								id="main-loader"
+								data-preset="stripe"
+								class="ldBar label-center"
+								style="width: 70%; height: auto; color:white;"
+							></div>
+							<!-- From Uiverse.io by Na3ar-17 --> 
+							<a class="main-download" id="main-download">
+								<label class="label">
+								<span class="circle"
+									><svg
+									class="icon"
+									aria-hidden="true"
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									>
+									<path
+										stroke="currentColor"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="1.5"
+										d="M12 19V5m0 14-4-4m4 4 4-4"
+									></path>
+									</svg>
+									<div class="square"></div>
+								</span>
+								<p class="title">Download</p>
+								<p class="title dl">data.csv</p>
+								</label>
+							</a>
+  
+							<h3 id="main-logs" style="width: 70%; text-align: center;"></h3>
+						</div>
+					</div>
+				</div>
+			</section>
+		<!-- Two -->
+			<!-- <section id="two" class="main style2">
+				<div class="container">
+					&nbsp;
+				</div>
+			</section> -->
+
+		<!-- Three -->
+			<section id="three" class="main style1 special">
+				<div class="container">
+					<header class="major">
+						<h2>Curious about how this works?</h2>
+					</header>
+					<p>This is obviously a downsampled version of the full version. The full version is much more capable and can extract engagements and views as well. <br>It's a perfect tool for sentiment analysis and data collection. If you want to learn more, just visit my profile and send me a message!</p>
+					<div class="flex items-center justify-center">
+						<img src="/static/images/cat.gif" class="w-[30%]" alt="Description of the GIF">
+					</div>
+					<!-- <div class="row gtr-150">
+						<div class="col-4 col-12-medium">
+							<span class="image fit"><img src="/static/images/pic02.jpg" alt="" /></span>
+							<h3>Magna feugiat lorem</h3>
+							<p>Adipiscing a commodo ante nunc magna lorem et interdum mi ante nunc lobortis non amet vis sed volutpat et nascetur.</p>
+							<ul class="actions special">
+								<li><a href="#" class="button">More</a></li>
+							</ul>
+						</div>
+						<div class="col-4 col-12-medium">
+							<span class="image fit"><img src="/static/images/pic03.jpg" alt="" /></span>
+							<h3>Magna feugiat lorem</h3>
+							<p>Adipiscing a commodo ante nunc magna lorem et interdum mi ante nunc lobortis non amet vis sed volutpat et nascetur.</p>
+							<ul class="actions special">
+								<li><a href="#" class="button">More</a></li>
+							</ul>
+						</div>
+						<div class="col-4 col-12-medium">
+							<span class="image fit"><img src="/static/images/pic04.jpg" alt="" /></span>
+							<h3>Magna feugiat lorem</h3>
+							<p>Adipiscing a commodo ante nunc magna lorem et interdum mi ante nunc lobortis non amet vis sed volutpat et nascetur.</p>
+							<ul class="actions special">
+								<li><a href="#" class="button">More</a></li>
+							</ul>
+						</div>
+					</div> -->
+				</div>
+			</section>
+
+		<!-- Four -->
+			<!-- <section id="four" class="main style2 special">
+				<div class="container">
+					<header class="major">
+						<h2>Ipsum feugiat consequat?</h2>
+					</header>
+					<p>Sed lacus nascetur ac ante amet sapien.</p>
+					<ul class="actions special">
+						<li><a href="#" class="button wide primary">Sign Up</a></li>
+						<li><a href="#" class="button wide">Learn More</a></li>
+					</ul>
+				</div>
+			</section> -->
+
+		<!-- Footer -->
+			<section id="footer">
+				<ul class="icons">
+					<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+					<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+					<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+					<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+					<li><a href="#" class="icon solid alt fa-envelope"><span class="label">Email</span></a></li>
+				</ul>
+				<ul class="copyright">
+					<li>&copy; Rafael Jongco</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+				</ul>
+			</section>
+			{% if wait != None %}
+				<div aria-readonly="" aria-disabled="true" hidden data-id="wait" data-value="{{wait}}"></div>
+			{% endif %}
+
+			{% if status != None %}
+				<div aria-readonly="" aria-disabled="true" hidden data-id="status" data-value="{{status}}"></div>
+			{% endif %}
+
+			
+		<!-- Scripts -->
+			<script src="/static/assets/js/loading-bar.min.js"></script>
+			<script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
+			<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+			<script src="/static/assets/js/jquery.min.js"></script>
+			<script src="/static/assets/js/jquery.scrolly.min.js"></script>
+			<script src="/static/assets/js/browser.min.js"></script>
+			<script src="/static/assets/js/breakpoints.min.js"></script>
+			<script src="/static/assets/js/util.js"></script>
+			<script src="/static/assets/js/main.js"></script>
+
+	</body>
+</html>
