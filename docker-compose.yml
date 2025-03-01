@@ -1,0 +1,22 @@
+services:
+  fbpagescraper:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rjinovino/fbpagescraper:latest
+    volumes:
+      - "./tools:/app/tools"
+      - "./app.py:/app/app.py"
+      - "./store.py:/app/store.py"
+      - "./static:/app/static"
+      - "./templates:/app/templates"
+      # - "./chrome_profile:/root/.config/google-chrome:rw"
+    environment:
+      - DISPLAY=host.docker.internal:0
+    command: python3 -m flask run --host=0.0.0.0
+    # command: google-chrome-stable --no-sandbox    # uncomment to refresh facebook session
+    shm_size: "2g"
+    ports:
+      - "50:5000"  # Map host port 50 to container port 5000
+    expose: 
+      - 50

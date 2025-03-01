@@ -1,5 +1,5 @@
 import random, os, time, sys
-sys.path.append(os.path.abspath('..'))
+from get_project_root import root_path
 import pandas as pd
 from datetime import datetime
 import shutil
@@ -20,6 +20,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import parse_qs, unquote, urlparse, urlunparse
 import pytz, humanfriendly
 
+ROOT_DIR = root_path(ignore_cwd=False)
 
 TEMP_SESSION_PREFIX = 'fb_page_session'
 
@@ -35,18 +36,24 @@ def generate_chrome_driver() -> tuple[WebDriver, str]:
 
     # Create the random temp folder
     os.makedirs(temp_folder, exist_ok=True)
-    source_dir = r"C:\chrome_win_session"
+    source_dir = rf"/root/.config/google-chrome"
     if os.path.exists(source_dir):
         shutil.copytree(source_dir, temp_folder, dirs_exist_ok=True)
-    else:
-        raise Exception(
-            f'Error: Source directory not found. You have to run "python login.py docker" first, at least once.'
-        )
+    # else:
+    #     raise Exception(
+    #         f'Error: Source directory not found. You have to run "python login.py docker" first, at least once.'
+    #     )
+    # for singleton in ["SingletonCookie", "SingletonLock", "SingletonSocket"]:
+    #         if os.path.islink(f"{temp_folder}/{singleton}"):
+    #             os.unlink(f"{temp_folder}/{singleton}")
+    
     chrome_options = Options()
-    chrome_options.add_argument("--headless")  # Run in headless mode (optional)
+    chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--disable-cache")
+    # chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_argument(f"--user-data-dir={temp_folder}")
+    
     return webdriver.Chrome(options=chrome_options), temp_folder
 
 
@@ -322,7 +329,7 @@ def facebook_post_engine(driver: WebDriver, fbpageurl: str):
                         continue
                     scrolltarget(driver, hidden_a)
                     action.move_to_element(hidden_a).perform() # hover mouse
-                    wait(1.5)
+                    wait(3)
                     try:
                         _type = WebDriverWait(hidden_a, 6,2).until(href_has_post_or_vid)
                     except TimeoutException:
@@ -341,6 +348,7 @@ def facebook_post_engine(driver: WebDriver, fbpageurl: str):
                     _unix = convert_to_unix_timestamp(ptime.text)
 
             except TimeoutException as te:
+                print('TIMEOUT', te)
                 pass
             except Exception as te:
                 print('Exception', te)

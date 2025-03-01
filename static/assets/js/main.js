@@ -56,7 +56,7 @@ $(document).ready(function() {
 		$('#main-logs').text('You can comeback later.')
 	}
 	var scrape = $("button#scrape")
-	var socket = io.connect('http://127.0.0.1:5000');
+	var socket = io.connect(window.location.origin);
 	scrape.click(async function() {
 		try{
 			if(wait > 0) return false;

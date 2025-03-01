@@ -1,6 +1,6 @@
 from bson import ObjectId
 from flask import Flask, session, render_template, request, jsonify, Response, make_response, redirect, url_for
-import time, json, re, hashlib, math
+import time, json, re, hashlib, math, sys
 from flask_socketio import SocketIO, emit, call
 from flask_cors import CORS 
 from flask_session import Session
@@ -29,9 +29,10 @@ MAX_TIME_SCRAPING_JOB=60*3
 NEXT_JOB_COOLDOWN=60
 
 app.config.from_object(__name__)
+CORS(app)
 Session(app)
 socketio = SocketIO(app, cors_allowed_origins="*",manage_session=False)
-CORS(app)
+
 
 def generate_data():
     for i in range(999):
@@ -80,7 +81,7 @@ def sanitize(url):
     
     if not parsed_url.netloc:  # No domain present
         return False, "Invalid URL. No domain found."
-    if parsed_url.netloc != 'www.facebook.com':
+    if 'facebook.com' not in parsed_url.netloc:
         return False, "Invalid Facebook URL."
     # Optionally, check if the domain is valid (simple regex to check domain pattern)
     domain_pattern = re.compile(r'^[a-zA-Z0-9.-]+$')
@@ -208,6 +209,7 @@ def scraper(data):
                 print('client is dead while queueing')
                 store.queue.delete_one({'_id': ObjectId(inline['_id'])})
                 return
+            
             is_alive_callback(False)
             next_inline = store.queue.find().sort("_id", 1).limit(1)
             current_on_the_job = store.job.count_documents({})
@@ -226,8 +228,8 @@ def scraper(data):
                 emit('stream', {'log':'Scraping . . .', 'percent': percent_on_scraping, 'completion': False}, callback=is_alive_callback)
                 break
             else:
-                # store.queue.update_one({'_id':ObjectId(inline['id'])},
-                #                        {'$set':{'createdAt': datetime.now()}})
+                store.queue.update_one({'_id':ObjectId(inline['id'])},
+                                       {'$set':{'createdAt': datetime.now()}})
                 refetch_older_queue = store.queue.count_documents({"_id": {"$lt": inline['_id']}})
                 emit('stream', {'log':f'Queuing . . .', 'percent': (percent_on_queueing + (percent_on_scraping - (steps_per_item_queue * (refetch_older_queue if refetch_older_queue > 0 else 1)))), 'completion': False}, callback=is_alive_callback)
 
@@ -254,6 +256,7 @@ def scraper(data):
                 print('client is dead while scraping')
                 store.job.delete_many({'_id':ObjectId(job_id)})
                 return
+                
             is_alive_callback(False)
 
             if _is_done:
@@ -261,6 +264,8 @@ def scraper(data):
                 emit('stream', {'log':f'Scraper completed.', 'percent':100, 'completion':True, 'data':collected_lines}, callback=is_alive_callback)
                 break
             
+            store.job.update_one({'_id': job_id},
+                                {'$set':{'startedAt': datetime.now()}})
             collected_lines.append(_data)
           
             updated_percentage = percent_on_scraping + increment_per_second * _elapsed
@@ -281,16 +286,18 @@ def socket_connect(sid):
 
 
 def scraper_engine(url:str):
+    scannerdriver, scannersession = generate_chrome_driver()
     try:
-        scannerdriver, scannersession = generate_chrome_driver()
         time_job_started = None
         for _link, _type, _unix in facebook_post_engine(scannerdriver, url):
             
             data = {
                 'post link': _link,
-                'date posted': datetime.fromtimestamp(_unix, tz=timezone.utc).strftime('%d %B %Y %I:%M %p'),
+                'date posted': None,
                 'category': _type
             }
+            if _unix != None:
+                data['date posted'] = datetime.fromtimestamp(_unix, tz=timezone.utc).strftime('%d %B %Y %I:%M %p')
             if time_job_started == None:
                 time_job_started = time.time()
             elapsed = (time.time() - time_job_started)
@@ -298,7 +305,9 @@ def scraper_engine(url:str):
                 break
             yield data, False, elapsed           
 
-    except:
+    except Exception as exc:
+        # raise exc
+        print(f'exception in engine {exc}', flush=True)
         pass
     finally:
         scannerdriver.quit()
