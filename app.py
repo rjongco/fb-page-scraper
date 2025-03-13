@@ -1,3 +1,4 @@
+import traceback
 from bson import ObjectId
 from flask import Flask, session, render_template, request, jsonify, Response, make_response, redirect, url_for
 import time, json, re, hashlib, math, sys
@@ -307,7 +308,8 @@ def scraper_engine(url:str):
 
     except Exception as exc:
         # raise exc
-        print(f'exception in engine {exc}', flush=True)
+        print(f'exception in engine {str(exc)}', flush=True)
+        print(f'stack trace', traceback.format_exc())
         pass
     finally:
         scannerdriver.quit()

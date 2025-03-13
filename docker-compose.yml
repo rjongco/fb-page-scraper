@@ -4,12 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: rjinovino/fbpagescraper:latest
-    volumes:
-      - "./tools:/app/tools"
-      - "./app.py:/app/app.py"
-      - "./store.py:/app/store.py"
-      - "./static:/app/static"
-      - "./templates:/app/templates"
+    # volumes:
       # - "./chrome_profile:/root/.config/google-chrome:rw"
     environment:
       - DISPLAY=host.docker.internal:0
@@ -17,6 +12,4 @@ services:
     # command: google-chrome-stable --no-sandbox    # uncomment to refresh facebook session
     shm_size: "2g"
     ports:
-      - "50:5000"  # Map host port 50 to container port 5000
-    expose: 
-      - 50
+      - "6600:5000"  # Map host port 50 to container port 5000

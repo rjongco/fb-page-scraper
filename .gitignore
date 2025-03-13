@@ -3,3 +3,5 @@ venv
 
 chrome_profile/*
 !chrome_profile/
+
+.env

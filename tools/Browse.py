@@ -46,11 +46,11 @@ def generate_chrome_driver() -> tuple[WebDriver, str]:
     # for singleton in ["SingletonCookie", "SingletonLock", "SingletonSocket"]:
     #         if os.path.islink(f"{temp_folder}/{singleton}"):
     #             os.unlink(f"{temp_folder}/{singleton}")
-    
+    print(f'session created in {temp_folder}', flush=True)
     chrome_options = Options()
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument("--disable-gpu")
-    # chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--headless')
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_argument(f"--user-data-dir={temp_folder}")
     
@@ -286,8 +286,8 @@ def facebook_post_engine(driver: WebDriver, fbpageurl: str):
     driver.get(fbpageurl)
     while not is_page_loaded(driver):
         time.sleep(1)
-
-    postmap = lambda n: (By.XPATH, f'//div[@aria-posinset and @aria-describedby and @aria-labelledby and number(@aria-posinset) = {n}]//span[text()="Facebook"]/ancestor::div[@aria-posinset][1]')
+    print('page fully rendered')
+    postmap = lambda n: (By.XPATH, f'//div[@aria-posinset and @aria-describedby and @aria-labelledby and number(@aria-posinset) = {n}]')
 
     inset = 1
 
@@ -295,7 +295,9 @@ def facebook_post_engine(driver: WebDriver, fbpageurl: str):
         _link = None
         _type = None
         _unix = None
+      
         post = waiter.until(EC.presence_of_element_located(postmap(inset)))
+        
         scrolltarget(driver, post)
         try:
             reel = WebDriverWait(post, 2, 1).until(EC.presence_of_element_located((By.XPATH, f".//a[@role='link' and contains(@href, '/reel/') and @aria-label='Open reel in Reels Viewer']")))

@@ -1,14 +1,15 @@
 
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-import sys
+import sys,os
 import pandas as pd
 from dotenv import load_dotenv
 
 class StoreController:
     def __init__(self):
         try:
-            uri = "mongodb+srv://rjongco:iapplegog@cluster0.o5y7d.mongodb.net/?retryWrites=true&w=majority&appName=cluster0"
+            load_dotenv()
+            uri = os.getenv('MONGODB_URI') if os.getenv('MONGODB_URI') else ''
             # Create a new client and connect to the server
             client = MongoClient(uri, server_api=ServerApi('1'))
             # Send a ping to confirm a successful connection
